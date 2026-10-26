@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11101c">
+  <title>الأبطال الأسطوريون | نموذج أولي</title>
+  <style>
+    :root{--bg:#100f1b;--panel:#1b1930;--gold:#f0c674;--text:#f7f2e8;--muted:#b7b2c9;--red:#ef6464;--blue:#69b7ff;--green:#6ce0a2}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at top,#292044 0,#100f1b 58%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+    main{max-width:760px;margin:auto;padding:18px 14px 34px}
+    header{text-align:center;padding:14px 4px 20px}
+    .eyebrow{color:var(--gold);letter-spacing:2px;font-size:12px}
+    h1{margin:7px 0;font-size:clamp(27px,7vw,42px)}
+    .subtitle{color:var(--muted);margin:0;font-size:14px}
+    .battle{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .card{background:linear-gradient(155deg,#28233f,#191728);border:1px solid #48405f;border-radius:18px;padding:14px;box-shadow:0 12px 30px #0004}
+    .avatar{height:112px;display:grid;place-items:center;font-size:64px;border-radius:12px;background:radial-gradient(circle,#49405e,#211d34);margin-bottom:12px}
+    .enemy .avatar{background:radial-gradient(circle,#713a4b,#27182a)}
+    .name{font-weight:800;font-size:18px}
+    .tag{font-size:11px;color:var(--gold);margin:3px 0 10px}
+    .stats{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:6px}
+    .bar{height:10px;background:#090912;border-radius:20px;overflow:hidden}
+    .fill{height:100%;width:100%;transition:width .25s;background:linear-gradient(90deg,#45c889,#8ce7ae)}
+    .enemy .fill{background:linear-gradient(90deg,#d74e67,#ff9a78)}
+    .status{margin:14px 0;padding:12px;border:1px solid #403853;border-radius:12px;text-align:center;color:var(--muted);font-size:13px}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+    button{border:0;border-radius:12px;padding:14px 10px;font:inherit;font-weight:800;cursor:pointer;min-height:48px}
+    button:active{transform:scale(.98)}
+    .primary{background:linear-gradient(135deg,#f5d58c,#c78b39);color:#20162a}
+    .secondary{background:#312b48;color:var(--text);border:1px solid #544968}
+    .secondary.active{background:#164a3b;border-color:#4bc894}
+    button:disabled{opacity:.4;cursor:not-allowed}
+    .log{background:#0b0a12;border:1px solid #302a40;border-radius:12px;padding:12px;min-height:92px;color:#d8d2e6;font-size:13px;line-height:1.8}
+    .log strong{color:var(--gold)}
+    footer{text-align:center;color:#8f89a3;font-size:11px;margin-top:18px}
+    @media(max-width:390px){.card{padding:10px}.avatar{height:90px;font-size:54px}.name{font-size:16px}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">مشروع لعبة قيد التطوير</div>
+    <h1>الأبطال الأسطوريون</h1>
+    <p class="subtitle">اختبر أول معركة — نسخة تجريبية بسيطة للموبايل</p>
+  </header>
+
+  <section class="battle" aria-label="ساحة المعركة">
+    <article class="card hero">
+      <div class="avatar" aria-hidden="true">⚔️</div>
+      <div class="name">إيريك حارس الشمال</div>
+      <div class="tag">محارب أسطوري · المستوى 1</div>
+      <div class="stats"><span>الصحة</span><span id="heroText">100 / 100</span></div>
+      <div class="bar"><div class="fill" id="heroBar"></div></div>
+      <div class="stats" style="margin-top:10px"><span>قوة الهجوم</span><span>18</span></div>
+    </article>
+    <article class="card enemy">
+      <div class="avatar" aria-hidden="true">🐉</div>
+      <div class="name">تنين الظلال</div>
+      <div class="tag">عدو · المستوى 1</div>
+      <div class="stats"><span>الصحة</span><span id="enemyText">120 / 120</span></div>
+      <div class="bar"><div class="fill" id="enemyBar"></div></div>
+      <div class="stats" style="margin-top:10px"><span>قوة الهجوم</span><span>9</span></div>
+    </article>
+  </section>
+
+  <div class="status" id="status" role="status">المعركة جاهزة. اختر هجومًا أو فعّل القتال التلقائي.</div>
+  <section class="actions">
+    <button class="primary" id="attack">⚔️ هجوم عادي</button>
+    <button class="secondary" id="skill">✨ ضربة أسطورية</button>
+    <button class="secondary" id="auto" aria-pressed="false">▶ تشغيل القتال التلقائي</button>
+    <button class="secondary" id="restart">↻ إعادة المعركة</button>
+  </section>
+  <section>
+    <h2 style="font-size:16px">سجل المعركة</h2>
+    <div class="log" id="log" aria-live="polite">بدأت المغامرة. ينتظر الأبطال أول أمر منك...</div>
+  </section>
+  <footer>نسخة 0.1 — نموذج تجريبي، وليست اللعبة النهائية. كل شيء يعمل محليًا داخل الصفحة.</footer>
+</main>
+<script>
+(() => {
+  const start = { hero: 100, enemy: 120 };
+  let hero = start.hero, enemy = start.enemy, autoTimer = null, skillReady = true;
+  const $ = id => document.getElementById(id);
+  const log = message => { $('log').innerHTML = message; };
+  function render(){
+    $('heroText').textContent = hero + ' / ' + start.hero;
+    $('enemyText').textContent = enemy + ' / ' + start.enemy;
+    $('heroBar').style.width = Math.max(0,hero/start.hero*100) + '%';
+    $('enemyBar').style.width = Math.max(0,enemy/start.enemy*100) + '%';
+    const done = hero <= 0 || enemy <= 0;
+    $('attack').disabled = done; $('skill').disabled = done || !skillReady;
+    $('auto').disabled = done;
+    if(enemy <= 0) $('status').textContent = '🏆 انتصار! هزمت تنين الظلال.';
+    else if(hero <= 0) $('status').textContent = '💀 انتهت المعركة. أعد المحاولة!';
+  }
+  function stopAuto(){
+    if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
+    $('auto').classList.remove('active');
+    $('auto').textContent='▶ تشغيل القتال التلقائي';
+    $('auto').setAttribute('aria-pressed','false');
+  }
+  function enemyTurn(){
+    if(enemy<=0 || hero<=0) return;
+    const damage = 7 + Math.floor(Math.random()*6);
+    hero = Math.max(0,hero-damage);
+    $('status').textContent = 'تنين الظلال يرد بهجوم ويسبب ' + damage + ' ضرر.';
+    log('🐉 <strong>تنين الظلال</strong> هاجم إيريك وألحق به ' + damage + ' ضرر.');
+    render();
+    if(hero<=0) stopAuto();
+  }
+  function attack(){
+    if(hero<=0 || enemy<=0) return;
+    const damage=15+Math.floor(Math.random()*8);
+    enemy=Math.max(0,enemy-damage);
+    $('status').textContent='إيريك هاجم وألحق ' + damage + ' ضرر بالعدو.';
+    log('⚔️ <strong>إيريك</strong> نفّذ هجومًا عاديًا وألحق ' + damage + ' ضرر.');
+    render();
+    if(enemy>0) enemyTurn(); else stopAuto();
+  }
+  function skill(){
+    if(!skillReady || hero<=0 || enemy<=0) return;
+    skillReady=false;
+    const damage=32+Math.floor(Math.random()*13);
+    enemy=Math.max(0,enemy-damage);
+    $('status').textContent='ضربة أسطورية! الضرر: ' + damage + '.';
+    log('✨ <strong>ضربة أسطورية!</strong> أطلق إيريك قوة الشمال وألحق ' + damage + ' ضرر.');
+    render();
+    if(enemy>0) enemyTurn(); else stopAuto();
+  }
+  $('attack').addEventListener('click',attack);
+  $('skill').addEventListener('click',skill);
+  $('auto').addEventListener('click',()=>{
+    if(autoTimer){stopAuto();$('status').textContent='تم إيقاف القتال التلقائي.';return;}
+    if(hero<=0||enemy<=0)return;
+    $('auto').classList.add('active');$('auto').textContent='⏸ إيقاف القتال التلقائي';$('auto').setAttribute('aria-pressed','true');
+    $('status').textContent='القتال التلقائي يعمل. يمكنك إيقافه في أي وقت.';
+    autoTimer=setInterval(()=>{if(hero<=0||enemy<=0){stopAuto();return;} attack();},1600);
+  });
+  $('restart').addEventListener('click',()=>{
+    stopAuto();hero=start.hero;enemy=start.enemy;skillReady=true;
+    $('status').textContent='بدأت معركة جديدة. اختر خطوتك!';
+    log('🛡️ عاد إيريك إلى ساحة المعركة. هل ستهاجم أم تستخدم القوة الأسطورية؟');
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
